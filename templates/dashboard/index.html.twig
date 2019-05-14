@@ -1,0 +1,436 @@
+{% extends 'dashboard/base.html.twig' %}
+
+
+    {% block title %}Tableau du board{% endblock %}
+    {% block body %}
+        {% if is_granted('ROLE_ADMIN') %}
+
+        <style>
+            .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+            .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        </style>
+        <div class="app" id="app">
+
+            <!-- ############ LAYOUT START-->
+
+            <!-- aside -->
+            <div id="aside" class="app-aside fade nav-dropdown black">
+                <!-- fluid app aside -->
+                <div class="navside dk" data-layout="column">
+
+                    <div data-flex class="hide-scroll">
+                        <nav class="scroll nav-stacked nav-stacked-rounded nav-color">
+
+                            <ul class="nav" data-ui-nav>
+                                <li class="nav-header hidden-folded">
+                                    <span class="text-xs">Main</span>
+                                </li>
+                                <li>
+                                    <a href="/tableau_board" class="b-danger">
+
+                  <span class="nav-icon text-white no-fade">
+                    <i class="ion-filing"></i>
+                  </span>
+                                        <span class="nav-text">Tableau du board</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/utilisateurs" class="b-success">
+                  <span class="nav-icon text-white no-fade">
+                    <i class="ion-android-apps"></i>
+                  </span>
+                                        <span class="nav-text">Liste d'ulitisateurs</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/categorie" class="b-info">
+                  <span class="nav-icon text-white no-fade">
+                    <i class="ion-email"></i>
+                  </span>
+                                        <span class="nav-text">Categories</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/produit" class="b-default">
+
+                                        <span class="nav-icon">
+                    <i class="ion-chatbubble-working"></i>
+                  </span>
+                                        <span class="nav-text">Produits</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/commande  " class="b-default">
+                  <span class="nav-icon">
+                    <i class="ion-person"></i>
+                  </span>
+                                        <span class="nav-text">Commandes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div data-flex-no-shrink>
+                        <div class="nav-fold dropup">
+                            <a data-toggle="dropdown">
+                                <div class="pull-left">
+                                    <div class="inline"><span class="avatar w-40 grey">JR</span></div>
+                                    <img src="images/a0.jpg" alt="..." class="w-40 img-circle hide">
+                                </div>
+                                <div class="clear hidden-folded p-x">
+                                    <span class="block _500 text-muted">{{ app.user.username }}</span>
+                                    <div class="progress-xxs m-y-sm lt progress">
+                                        <div class="progress-bar info" style="width: 15%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu w dropdown-menu-scale ">
+
+                                <a class="dropdown-item" href="logout">Deconnexion</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / -->
+
+            <!-- content -->
+            <div id="content" class="app-content box-shadow-z2 bg pjax-container" role="main">
+                <div class="app-header white bg b-b">
+                    <div class="navbar" data-pjax>
+                        <a data-toggle="modal" data-target="#aside" class="navbar-item pull-left hidden-lg-up p-r m-a-0">
+                            <i class="ion-navicon"></i>
+                        </a>
+                        <div class="navbar-item pull-left h5" id="pageTitle">Tableau du board</div>
+
+                    </div>
+                </div>
+
+                <div class="app-body">
+
+                    <!-- ############ PAGE START-->
+                    <div class="row-col">
+                        <div class="col-lg b-r">
+                            <div class="row no-gutter">
+                                <div class="col-xs-6 col-sm-3 b-r b-b">
+                                    <div class="padding">
+                                        <div>
+                                            <span class="pull-right"><i class="fa fa-caret-up text-primary m-y-xs"></i></span>
+                                            <span class="text-muted l-h-1x"><i class="ion-ios-grid-view text-muted"></i></span>
+                                        </div>
+                                        <div class="text-center">
+                                            <h2 class="text-center _600">{{ nombre_utilisateur }}</h2>
+                                            <p class="text-muted m-b-md">Clients</p>
+                                            <div>
+                                                <span data-ui-jp="sparkline" data-ui-options="[2,3,2,2,1,3,6,3,2,1], {type:'line', height:20, width: '60', lineWidth:1, valueSpots:{'0:':'#818a91'}, lineColor:'#818a91', spotColor:'#818a91', fillColor:'', highlightLineColor:'rgba(120,130,140,0.3)', spotRadius:0}" class="sparkline inline"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-3 b-r b-b">
+                                    <div class="padding">
+                                        <div>
+                                            <span class="pull-right"><i class="fa fa-caret-up text-primary m-y-xs"></i></span>
+                                            <span class="text-muted l-h-1x"><i class="ion-document text-muted"></i></span>
+                                        </div>
+                                        <div class="text-center">
+                                            <h2 class="text-center _600">{{ category }}</h2>
+                                            <p class="text-muted m-b-md">Categories</p>
+                                            <div>
+                                                <span data-ui-jp="sparkline" data-ui-options="[1,1,0,2,3,4,2,1,2,2], {type:'line', height:20, width: '60', lineWidth:1, valueSpots:{'0:':'#818a91'}, lineColor:'#818a91', spotColor:'#818a91', fillColor:'', highlightLineColor:'rgba(120,130,140,0.3)', spotRadius:0}" class="sparkline inline"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-3 b-r b-b">
+                                    <div class="padding">
+                                        <div>
+                                            <span class="pull-right"><i class="fa fa-caret-down text-danger m-y-xs"></i></span>
+                                            <span class="text-muted l-h-1x"><i class="ion-pie-graph text-muted"></i></span>
+                                        </div>
+                                        <div class="text-center">
+                                            <h2 class="text-center _600">{{ product }}</h2>
+                                            <p class="text-muted m-b-md">Produits</p>
+                                            <div>
+                                                <span data-ui-jp="sparkline" data-ui-options="[9,2,5,5,7,4,4,3,2,2], {type:'line', height:20, width: '60', lineWidth:1, valueSpots:{'0:':'#818a91'}, lineColor:'#818a91', spotColor:'#818a91', fillColor:'', highlightLineColor:'rgba(120,130,140,0.3)', spotRadius:0}" class="sparkline inline"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-3 b-b">
+                                    <div class="padding">
+                                        <div>
+                                            <span class="pull-right"><i class="fa fa-caret-up text-primary m-y-xs"></i></span>
+                                            <span class="text-muted l-h-1x"><i class="ion-paper-airplane text-muted"></i></span>
+                                        </div>
+                                        <div class="text-center">
+                                            <h2 class="text-center _600">{{ command }}</h2>
+                                            <p class="text-muted m-b-md">Commandes</p>
+                                            <div>
+                                                <span data-ui-jp="sparkline" data-ui-options="[3,3,1,62,4,3,7,3,2,5], {type:'line', height:20, width: '60', lineWidth:1, valueSpots:{'0:':'#818a91'}, lineColor:'#818a91', spotColor:'#818a91', fillColor:'', highlightLineColor:'rgba(120,130,140,0.3)', spotRadius:0}" class="sparkline inline"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="padding">
+
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="box">
+                                            <div class="box-header">
+                                                <span class="label success pull-right">52</span>
+                                                <h3>Liste d'utilisateurs</h3>
+                                            </div>
+                                            <div class="p-b-sm">
+                                                <ul class="list no-border m-a-0">
+                                                    <li class="list-item">
+                                                        <a href="#" class="list-left">
+				                	<span class="w-40 avatar danger">
+					                  <span>C</span>
+					                  <i class="on b-white bottom"></i>
+					                </span>
+                                                        </a>
+                                                        <div class="list-body">
+                                                            <div><a href="#">Chris Fox</a></div>
+                                                            <small class="text-muted text-ellipsis">Designer, Blogger</small>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-item">
+                                                        <a href="#" class="list-left">
+				                  <span class="w-40 avatar purple">
+					                  <span>M</span>
+					                  <i class="on b-white bottom"></i>
+					              </span>
+                                                        </a>
+                                                        <div class="list-body">
+                                                            <div><a href="#">Mogen Polish</a></div>
+                                                            <small class="text-muted text-ellipsis">Writter, Mag Editor</small>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-item">
+                                                        <a href="#" class="list-left">
+				                  <span class="w-40 avatar info">
+					                  <span>J</span>
+					                  <i class="off b-white bottom"></i>
+					              </span>
+                                                        </a>
+                                                        <div class="list-body">
+                                                            <div><a href="#">Joge Lucky</a></div>
+                                                            <small class="text-muted text-ellipsis">Art director, Movie Cut</small>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-item">
+                                                        <a href="#" class="list-left">
+				                  <span class="w-40 avatar warning">
+					                  <span>F</span>
+					                  <i class="on b-white bottom"></i>
+					              </span>
+                                                        </a>
+                                                        <div class="list-body">
+                                                            <div><a href="#">Folisise Chosielie</a></div>
+                                                            <small class="text-muted text-ellipsis">Musician, Player</small>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-item">
+                                                        <a href="#" class="list-left">
+				                	<span class="w-40 avatar success">
+					                  <span>P</span>
+					                  <i class="away b-white bottom"></i>
+					                </span>
+                                                        </a>
+                                                        <div class="list-body">
+                                                            <div><a href="#">Peter</a></div>
+                                                            <small class="text-muted text-ellipsis">Musician, Player</small>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="box">
+                                            <div class="box-header">
+                                                <h3>Tasks</h3>
+                                                <small>20 finished, 5 remaining</small>
+                                            </div>
+                                            <div class="box-tool">
+                                                <ul class="nav">
+                                                    <li class="nav-item inline dropdown">
+                                                        <a class="nav-link text-muted p-x-xs" data-toggle="dropdown">
+                                                            <i class="fa fa-ellipsis-v"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-scale pull-right">
+                                                            <a class="dropdown-item" href="#">New task</a>
+                                                            <a class="dropdown-item" href="#">Make all finished</a>
+                                                            <a class="dropdown-item" href="#">Make all unfinished</a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item">Settings</a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="box-body">
+                                                <div class="streamline">
+                                                    <div class="sl-item b-success">
+                                                        <div class="sl-content">
+                                                            <div class="sl-date text-muted">8:30</div>
+                                                            <div>Call to customer <a href="#" class="text-info">Jacob</a> and discuss the detail about the AP project.</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="sl-item">
+                                                        <div class="sl-content">
+                                                            <div class="sl-date text-muted">Sat, 5 Mar</div>
+                                                            <div>Prepare for presentation</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="sl-item">
+                                                        <div class="sl-content">
+                                                            <div class="sl-date text-muted">Sun, 11 Feb</div>
+                                                            <div><a href="#" class="text-info">Jessi</a> assign you a task <a href="#" class="text-info">Mockup Design</a>.</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="box-footer">
+                                                <a href="#" class="btn btn-xs white rounded">More</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="row-col b-a white m-b">
+                                            <div class="col-md-8">
+                                                <div class="box-header b-b"><h3>World Market</h3></div>
+                                                <div class="box-body">
+                                                    <p class="m-b-lg text-muted">Worldwide data visualization</p>
+                                                    <div class="m-b-md" style="height:240px;" data-ui-jp="vectorMap" data-ui-options="{
+					          map: 'world_mill_en',
+					          markers: [{latLng: [52.5167, 13.3833], name: 'Berlin'}, {latLng: [48.8567, 2.3508], name: 'Paris'}, {latLng: [35.6833, 139.6833], name: 'Tokyo'}, {latLng: [40.7127, -74.0059], name: 'New York City'},{latLng: [49.2827, -123.1207], name: 'City of Vancouver'},{latLng: [22.2783, 114.1747], name: 'Hong Kong'},{latLng: [55.7500, 37.6167], name: 'Moscow'},{latLng: [37.7833, -122.4167], name: 'San Francisco'},{latLng: [39.9167, 116.3833], name: 'Beijing'}],
+					          normalizeFunction: 'polynomial',
+					          backgroundColor: 'transparent',
+					          regionsSelectable: true,
+					          markersSelectable: true,
+					          regionStyle: {
+					            initial: {
+					              fill: 'rgba(120,130,140,0.3)'
+					            },
+					            hover: {
+					              fill: 'rgba(120,130,140,0.3)',
+					              stroke: '#fff'
+					            },
+					          },
+					          markerStyle: {
+					            initial: {
+					              fill: '#f3c111',
+					              stroke: '#fff'
+					            },
+					            hover: {
+					              fill: 'rgba(120,130,140,0.3)',
+					              stroke: '#fff'
+					            }
+					          },
+					          series: {
+					            markers: [{
+					              attribute: 'fill',
+					              scale: ['#22b66e','#f3c111', '#ef193c'],
+					              values: [ 605.16, 310.69, 405.17, 748.31, 207.35, 217.22, 137.70, 280.71, 210.32, 325.42 ]
+					            },{
+					              attribute: 'r',
+					              scale: [5, 20],
+					              values: [ 605.16, 310.69, 405.17, 748.31, 207.35, 217.22, 137.70, 280.71, 210.32, 325.42 ]
+					            }]
+					          }
+					        }" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 b-l no-border-sm">
+                                                <div class="box-header b-b"><h3>Infomation</h3></div>
+                                                <div class="list-group no-border no-radius">
+                                                    <div class="list-group-item">
+                                                        <span class="pull-right text-muted">293,200</span>
+                                                        <i class="label label-xs red m-r-sm"></i>
+                                                        New York City
+                                                    </div>
+                                                    <div class="list-group-item">
+                                                        <span class="pull-right text-muted">203,000</span>
+                                                        <i class="label label-xs orange m-r-sm"></i>
+                                                        Berlin
+                                                    </div>
+                                                    <div class="list-group-item">
+                                                        <span class="pull-right text-muted">180,230</span>
+                                                        <i class="label label-xs yellow m-r-sm"></i>
+                                                        Paris
+                                                    </div>
+                                                    <div class="list-group-item">
+                                                        <span class="pull-right text-muted">130,100</span>
+                                                        <i class="label label-xs green m-r-sm"></i>
+                                                        Maldives
+                                                    </div>
+                                                    <div class="list-group-item">
+                                                        <span class="pull-right text-muted">98,000</span>
+                                                        <i class="label label-xs teal m-r-sm"></i>
+                                                        Palau
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ############ PAGE END-->
+
+                </div>
+            </div>
+            <!-- / -->
+
+
+
+
+            <!-- ############ LAYOUT END-->
+        </div>
+
+{% else %}
+    <div class="app" id="app">
+
+        <!-- ############ LAYOUT START-->
+
+
+        <!-- content -->
+        <div id="content" class="app-content" role="main">
+            <div class="app-body">
+
+                <!-- ############ PAGE START-->
+
+                <div class="row-col amber h-v">
+                    <div class="row-cell v-m">
+                        <div class="text-center col-sm-6 offset-sm-3 p-y-lg">
+                            <h1 class="display-3 m-y-lg">Pardon! la page que vous recherchez n'existe pas.</h1>
+                            <p class="m-y text-muted h4">
+                                -- 404 --
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ############ PAGE END-->
+
+            </div>
+        </div>
+        <!-- / -->
+
+        <!-- ############ LAYOUT END-->
+    </div>
+{% endif %}
+
+    {% endblock %}
